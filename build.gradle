@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+}
+
+group 'xquare.app'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    manifest {
+        attributes(
+                'Premain-Class': 'xquare.trace.Agent'
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    implementation 'net.bytebuddy:byte-buddy:1.14.16'
+    compileOnly group: 'org.hibernate', name: 'hibernate-core', version: '4.0.0.Final'
+
+    implementation 'com.google.auto.service:auto-service:1.0.1'
+    annotationProcessor 'com.google.auto.service:auto-service:1.0.1'
+}
+
+test {
+    useJUnitPlatform()
+}
